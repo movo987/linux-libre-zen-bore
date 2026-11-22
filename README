@@ -3,29 +3,29 @@ linux-zako
 Linux-libre with the Zen patchset and the BORE scheduler on top.
 
 Layout
-    patches/<version>/   patch set for one kernel version
-    series/<version>     order to apply them in
-    sources/<version>    base tarball, its URL and sha256
-    COPYING              GPL-2
+    releases/<tag>/patches/   patch set of that release
+    releases/<tag>/series     order to apply them in
+    releases/<tag>/sources    base tarball, its URL and sha256, plus the Zen tag
+                              and the BORE version it was built against
+    COPYING                   GPL-2
 
-    Every version has its own directory and they are all kept. A new version adds
-    a directory, it never replaces an older one.
+    One directory per published tag, kept forever. A new release adds a
+    directory, no existing directory is ever rewritten.
 
 Build
+    cd releases/<tag>
     tar xf linux-libre-<version>-gnu.tar.xz
     cd linux-<version>
-    git apply ../patches/<version>/0001-*.patch
-    git apply ../patches/<version>/0002-*.patch
+    git apply ../patches/0001-*.patch
+    git apply ../patches/0002-*.patch
     make olddefconfig
     make LOCALVERSION=-zako<N>
 
-    Apply in the order given by series/<version>. Enable CONFIG_SCHED_BORE in
-    olddefconfig. Keep CONFIG_SCHED_ALT (BMQ, PDS) off, it costs cgroup v2
-    cpu.weight and cpu.max, sched_ext and SCHED_CORE.
+    Apply in the order given by series. Enable CONFIG_SCHED_BORE in olddefconfig.
+    Keep CONFIG_SCHED_ALT (BMQ, PDS) off, it costs cgroup v2 cpu.weight and
+    cpu.max, sched_ext and SCHED_CORE.
 
 Tags
-    v<version>-zako<N>: kernel version plus a revision of this queue. Published
-    tags do not move.
-
-Next version
-    Added once Linux-libre, Zen and BORE have all reached it.
+    v<version>-zako<N>: kernel version plus a revision of this queue. A new kernel
+    version starts at zako1, a Zen or BORE update within the same kernel version
+    increments N. Published tags do not move.
