@@ -4,7 +4,7 @@ Patch queue for Linux-libre with the Zen patchset and the BORE scheduler.
 Patches only: no kernel tree, no build scripts, no releases.
 
 Baseline: linux-libre 7.3.5 gnu tarball
-Source: https://www.linux-libre.fsfla.org/pub/linux-libre/releases/LATEST-7.3.N/
+Source: https://www.linux-libre.fsfla.org/pub/linux-libre/releases/7.3.5-gnu/
 SHA-256: 00f30f9cc4328a4b0a8d8a71349f9dc9fabed762f0a27993160e319377ef5753
 
 Apply in the order listed in series/7.3:
