@@ -1,14 +1,14 @@
 linux-zako
 
-Patch queue for Linux-libre with the Zen patchset and the BORE scheduler.
-Patches only: no kernel tree, no build scripts, no releases.
+Linux-libre with the Zen patchset and the BORE scheduler on top.
 
-Baseline: linux-libre 7.3.5 gnu tarball
-Source: https://www.linux-libre.fsfla.org/pub/linux-libre/releases/7.3.5-gnu/
-SHA-256: 00f30f9cc4328a4b0a8d8a71349f9dc9fabed762f0a27993160e319377ef5753
+Base
+    linux-libre 7.3.5 gnu tarball
+    https://www.linux-libre.fsfla.org/pub/linux-libre/releases/7.3.5-gnu/
+    sha256 00f30f9cc4328a4b0a8d8a71349f9dc9fabed762f0a27993160e319377ef5753
+    the tarball and deblob scripts in that directory are signed by Alexandre Oliva
 
-Apply in the order listed in series/7.3:
-
+Build
     tar xf linux-libre-7.3.5-gnu.tar.xz
     cd linux-libre-7.3.5
     git apply ../patches/7.3/0001-zen-7.3.5-zen1.patch
@@ -16,10 +16,16 @@ Apply in the order listed in series/7.3:
     make olddefconfig
     make LOCALVERSION=-zako1
 
-Leave CONFIG_SCHED_ALT (BMQ, PDS) off. It drops cgroup v2 cpu.weight and
-cpu.max, sched_ext and SCHED_CORE.
+    Enable CONFIG_SCHED_BORE in olddefconfig. Keep CONFIG_SCHED_ALT (BMQ, PDS)
+    off, it costs cgroup v2 cpu.weight and cpu.max, sched_ext and SCHED_CORE.
 
-Tags are named vX.Y.Z-zakoN and are never moved or deleted.
+Patches
+    Applied in the order listed in series/7.3. 0001 is the Zen patchset, 0002 is
+    BORE rebased onto it.
 
-The queue moves to a new version only when Linux-libre, Zen and BORE have all
-reached it.
+Tags
+    v7.3.5-zako1 is linux-libre 7.3.5 with revision 1 of this queue. Tags do not
+    move once published.
+
+Next version
+    The queue moves when Linux-libre, Zen and BORE have all reached it.
