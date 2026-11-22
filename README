@@ -7,7 +7,7 @@ Layout
     releases/<tag>/series     order to apply them in
     releases/<tag>/sources    base tarball, its URL and sha256, plus the Zen tag
                               and the BORE version it was built against
-    COPYING                   GPL-2
+    COPYING                   GPL-2.0
 
     One directory per published tag, kept forever. A new release adds a
     directory, no existing directory is ever rewritten.
