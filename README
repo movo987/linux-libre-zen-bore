@@ -1,4 +1,4 @@
-linux-zako
+linux-libre-zen-bore
 
 Linux-libre with the Zen patchset and the BORE scheduler on top.
 
@@ -19,13 +19,15 @@ Build
     git apply ../patches/0001-*.patch
     git apply ../patches/0002-*.patch
     make olddefconfig
-    make LOCALVERSION=-zako<N>
+    make LOCALVERSION=-zen.bore<N>
 
     Apply in the order given by series. Enable CONFIG_SCHED_BORE in olddefconfig.
     Keep CONFIG_SCHED_ALT (BMQ, PDS) off, it costs cgroup v2 cpu.weight and
     cpu.max, sched_ext and SCHED_CORE.
 
 Tags
-    v<version>-zako<N>: kernel version plus a revision of this queue. A new kernel
-    version starts at zako1, a Zen or BORE update within the same kernel version
-    increments N. Published tags do not move.
+    v<version>-zen.bore<N>: kernel version plus a revision of the queue, for
+    example v7.3.6-zen.bore1. A new kernel version starts at 1, a Zen or BORE
+    update within the same kernel version increments N. Tags below v7.3.6-zen.bore1
+    still carry the old -zakoN suffix and stay as they are. Published tags do not
+    move.
