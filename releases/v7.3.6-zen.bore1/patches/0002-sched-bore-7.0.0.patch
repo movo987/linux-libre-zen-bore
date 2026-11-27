@@ -1,48 +1,3 @@
-From 8e0f25bdcc68fa437072260acc6b4347ece2a794 Mon Sep 17 00:00:00 2001
-From: Masahito S <firelzrd@gmail.com>
-Date: Sat, 19 Sep 2026 00:31:35 +0900
-Subject: [PATCH] sched-bore-7.0.0-rebased-for-7.3.6
-
-Rebased onto linux-libre 7.3.6 (EXTRAVERSION = -gnu) with
-0001-zen-7.3.6-zen1 applied. Five conflict sites were resolved by hand; no
-BORE functionality was dropped:
-
-  * kernel/sched/fair.c: the CONFIG_SCHED_BORE base-slice definitions
-    (nsecs_per_tick, sysctl_sched_min_base_slice, sysctl_sched_base_slice) are
-    nested in a new #ifdef CONFIG_SCHED_BORE block, with zen's existing
-    CONFIG_ZEN_INTERACTIVE 400000/700000 pair kept in the #else branch, so the
-    BORE values win when BORE is enabled and zen's values are kept otherwise.
-  * kernel/sched/debug.c: base_slice_ns (0444) and min_base_slice_ns are moved
-    inside the existing #ifndef CONFIG_SCHED_ALT region of sched_init_debug(),
-    together with the 0644 EEVDF fallback, and tunable_scaling is guarded by
-    #if !defined(CONFIG_SCHED_BORE).  This keeps a CONFIG_SCHED_ALT=y build
-    from referencing sched_min_base_slice_fops, which alt builds never define.
-  * init/Kconfig: the SCHED_BORE block is inserted before SCHED_AUTOGROUP,
-    whose entry zen extended with "depends on !SCHED_ALT".
-  * kernel/sched/Makefile: obj-$(CONFIG_SCHED_BORE) += bore.o is appended
-    after zen's ifdef CONFIG_SCHED_ALT restructure of core.o/fair.o.
-  * kernel/sched/build_utility.c: the <linux/sched/bore.h> include is placed
-    before #include "clock.c", ahead of zen's alt_topology.c block, and thus
-    before the debug.c inclusion that uses bore_score().
-
-Signed-off-by: Masahito S <firelzrd@gmail.com>
----
- include/linux/sched.h        |  29 +++
- include/linux/sched/bore.h   |  64 ++++++
- init/Kconfig                 |  17 ++
- kernel/Kconfig.hz            |  17 ++
- kernel/exit.c                |   4 +
- kernel/fork.c                |  13 ++
- kernel/futex/waitwake.c      |  11 +
- kernel/sched/Makefile        |   1 +
- kernel/sched/bore.c          | 530 +++++++++++++++++++++++++++++++++++++++++++
- kernel/sched/build_utility.c |   4 +
- kernel/sched/core.c          |  12 +
- kernel/sched/debug.c         |  63 ++++-
- kernel/sched/fair.c          | 188 ++++++++++++++-
- kernel/sched/sched.h         |   9 +
- 14 files changed, 949 insertions(+), 13 deletions(-)
-
 diff --git a/include/linux/sched.h b/include/linux/sched.h
 index ed201052c..451479a30 100644
 --- a/include/linux/sched.h
@@ -1418,6 +1373,3 @@ index 4e9540eca..6bfc4d9a7 100644
  
  extern int sysctl_resched_latency_warn_ms;
  extern int sysctl_resched_latency_warn_once;
--- 
-2.47.3
-
